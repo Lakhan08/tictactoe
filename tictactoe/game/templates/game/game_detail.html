@@ -1,0 +1,73 @@
+<!-- templates/game/game_detail.html -->
+{% load custom_filters %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Game</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        td {
+            width: 60px;
+            height: 60px;
+            text-align: center;
+            vertical-align: middle;
+            border: 1px solid #000;
+            font-size: 24px;
+        }
+        button {
+            width: 100%;
+            height: 100%;
+            font-size: 24px;
+            background-color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Tic-Tac-Toe</h1>
+    <h2>{{ game.player_x.name }} (X) vs. {% if game.player_o %}{{ game.player_o.name }}{% else %}AI{% endif %} (O)</h2>
+    
+    <table>
+        {% for row in game.board|default_if_none:"---------"|make_rows %}
+            <tr>
+                {% for cell in row %}
+                    <td>
+                        {% if cell == "X" %}
+                            X
+                        {% elif cell == "O" %}
+                            O
+                        {% else %}
+                            <form method="post" action="{% url 'make_move' game.id %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="position" value="{{ forloop.parentloop.counter0 }}">
+                                <button type="submit"></button>
+                            </form>
+                        {% endif %}
+                    </td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+
+    <h3>
+        {% if game.winner %}
+            Winner: {{ game.winner }}
+        {% elif not game.is_active %}
+            Draw!
+        {% else %}
+            Current Turn: {{ game.current_turn }}
+        {% endif %}
+    </h3>
+
+    <a href="{% url 'home' %}">Home</a>
+</body>
+</html>

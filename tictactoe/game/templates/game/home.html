@@ -1,0 +1,23 @@
+<!-- templates/game/home.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tic-Tac-Toe</title>
+</head>
+<body>
+    <h1>Tic-Tac-Toe</h1>
+    <form action="{% url 'new_game' %}" method="post">
+        {% csrf_token %}
+        
+        <label for="player_x_name">Enter Player X Name or Email:</label>
+        <input type="text" id="player_x_name" name="player_x_name" required><br><br>
+
+        <label for="player_o_name">Enter Player O Name or Email (or leave blank for AI):</label>
+        <input type="text" id="player_o_name" name="player_o_name"><br><br>
+
+        <button type="submit">Start Game</button>
+    </form>
+    <a href="{% url 'leaderboard' %}">Leaderboard</a>
+</body>
+</html>
